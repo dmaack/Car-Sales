@@ -1,3 +1,4 @@
+import { bindActionCreators } from "../../../../Library/Caches/typescript/3.6/node_modules/redux";
 
 export const initialState = {
     additionalPrice: 0,
@@ -24,21 +25,25 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_FEATURE':
             return {
               ...state,
-              additionalPrice: state.car.features.includes(action.payload) ? state.additionalPrice : state.additionalPrice + action.payload.price,
+              // additionalPrice: state.car.features.includes(action.payload) ? state.additionalPrice : state.additionalPrice + action.payload.price,
               car: {
                 ...state.car,
-                features: state.car.features.includes(action.payload) ? state.car.features : [...state.car.features, action.payload]
+                price: state.car.price + action.payload.price,
+                features: state.car.features.concat([action.payload])
               },
+              store: state.store.filter(item => item.id !== action.payload.id)
             }
         case 'REMOVE_FEATURE':
           console.log(state)
           return{
             ...state,
-            additionalPrice: state.additionalPrice - action.payload.price,
+            // additionalPrice: state.additionalPrice - action.payload.price,
             car: {
               ...state.car,
-              features: [state.car.features].filter(feature => feature.id !== action.payload.id)
+              price: state.car.price - action.payload.price,
+              features: state.car.features.filter(feature => feature.id !== action.payload.id)
             },
+            store: state.store.concat([action.payload])
           }
             default:
         return state;
