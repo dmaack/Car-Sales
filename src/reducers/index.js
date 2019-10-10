@@ -1,4 +1,3 @@
-// import { statement } from "@babel/template";
 
 export const initialState = {
     additionalPrice: 0,
@@ -19,25 +18,27 @@ export const initialState = {
 
 //Want to ADD_FEATURE
 //Want to DELETE_FEATURE
-export const carSalesReducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
+  console.log('this is my reducer state and action', state, action)
     switch(action.type) {
         case 'ADD_FEATURE':
             return {
               ...state,
+              additionalPrice: state.car.features.includes(action.payload) ? state.additionalPrice : state.additionalPrice + action.payload.price,
               car: {
                 ...state.car,
-                features: [...state.car.features, action.payload.features]
+                features: state.car.features.includes(action.payload) ? state.car.features : [...state.car.features, action.payload]
               },
-              additionalPrice: state.additionalPrice + action.payload.feature.price
             }
         case 'REMOVE_FEATURE':
+          console.log(state)
           return{
             ...state,
+            additionalPrice: state.additionalPrice - action.payload.price,
             car: {
               ...state.car,
-              features: [state.car.features].filter(feature => feature.id !== action.payload.feature.id)
+              features: [state.car.features].filter(feature => feature.id !== action.payload.id)
             },
-            additionalPrice: state.additionalPrice - action.payload.feature.price
           }
             default:
         return state;
